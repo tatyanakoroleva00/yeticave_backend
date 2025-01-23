@@ -1,0 +1,15 @@
+{
+    "name": "tatiana/test",
+    "description": "My php project",
+    "autoload": {
+        "psr-4": {
+            "Tatiana\\Test\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Tatiana"
+        }
+    ],
+    "require": {}
+}
