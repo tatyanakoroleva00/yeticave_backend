@@ -3,6 +3,13 @@ session_start();
 require_once 'models/init.php';
 require_once 'models/functions.php';
 require_once 'controllers/email.php';
+
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+
 $title = 'Главная страница';
 $i = 0;
 
@@ -137,30 +144,37 @@ $result2 = $lots_list;
 if ($result2 && mysqli_num_rows($result2) > 0) {
 
     $search_array = mysqli_fetch_all($result2, MYSQLI_ASSOC);
-    $page_content = include_template('index.php', [
-        'categories_query' => $categories_query,
-        'con' => $con,
-        'page' => $page,
-        'lots_list' => $lots_list,
-        'totalPages' => $total_pages,
-        'type_of_lots_to_show' => $_GET['show'],
-        'search_array' => $search_array,
-        'nextOrder' => $nextOrder,
-        'order' => $order,
-        'publicationOrder' => $publicationOrder,
-        'nextPublicationOrder' => $nextPublicationOrder,
-    ]);
 
-} else {
-//    echo "Ничего не найдено по вашему запросу!";
-    $page_content = '<h1>Ничего не найдено по вашему запросу!</h1>';
+//    $page_content = include_template('index.php', [
+//        'categories_query' => $categories_query,
+//        'con' => $con,
+//        'page' => $page,
+//        'lots_list' => $lots_list,
+//        'totalPages' => $total_pages,
+//        'type_of_lots_to_show' => $_GET['show'],
+//        'search_array' => $search_array,
+//        'nextOrder' => $nextOrder,
+//        'order' => $order,
+//        'publicationOrder' => $publicationOrder,
+//        'nextPublicationOrder' => $nextPublicationOrder,
+//    ]);
+
+//} else {
+////    echo "Ничего не найдено по вашему запросу!";
+//    $page_content = '<h1>Ничего не найдено по вашему запросу!</h1>';
+//}
 }
+//$response = [
+//    'data1' => $categories_query,
+//];
+//echo json_encode($response);
 
-$layout_content = include_template('layout.php', [
-    'title' => $title,
-    'content' => $page_content,
-    'categories_query' => $categories_query,
-    'con' => $con,
-]);
+$layout_content = include_template('react.php');
+//$layout_content = include_template('react.php', [
+//    'title' => $title,
+//    'content' => $page_content,
+//    'categories_query' => $categories_query,
+//    'con' => $con,
+//]);
 
 print_r($layout_content);

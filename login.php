@@ -15,8 +15,6 @@ $form = json_decode(file_get_contents('php://input'), true);
 $required = ['email', 'password'];
 $errors = [];
 
-//$_SESSION['test'] = 'test1';
-
 # Аутентификация
 $query = "SELECT * from `users`";
 $result = mysqli_query($con, $query);
@@ -61,5 +59,3 @@ if (count($errors)) {
     }
     echo json_encode(['status' => 'success', 'user' => $_SESSION['user']]);
 }
-
-//session_write_close();

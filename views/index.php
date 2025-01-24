@@ -19,6 +19,10 @@
         <button onclick="window.location.href = '?show=old'">Закрытые лоты</button>
     </div>
     <hr/>
+
+
+
+
     <div>
         <button class="sort-button <?= $order ?>" onclick="window.location.href='?order=<?= $nextOrder ?>'">
             Окончание аукциона - <?php echo $order === 'desc' ? "с начала": "с конца"?>
