@@ -4,24 +4,18 @@ require_once 'models/init.php';
 require_once 'models/functions.php';
 require_once 'controllers/email.php';
 
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
-
 $title = 'Главная страница';
 $i = 0;
 
 # -----------------ВСЕ КАТЕГОРИИ
-$query2 = "SELECT * FROM category";
-$categories_query = mysqli_query($con, $query2);
+//$query2 = "SELECT * FROM category";
+//$categories_query = mysqli_query($con, $query2);
 
-$order = isset($_GET['order']) && $_GET['order'] === 'asc' ? 'asc' : 'desc';
-$nextOrder = $order === 'asc' ? 'desc' : 'asc';
+//$order = isset($_GET['order']) && $_GET['order'] === 'asc' ? 'asc' : 'desc';
+//$nextOrder = $order === 'asc' ? 'desc' : 'asc';
 
-$publicationOrder = isset($_GET['publicationOrder']) && $_GET['publicationOrder'] === 'asc' ? 'asc' : 'desc';
-$nextPublicationOrder = $publicationOrder === 'desc' ? 'asc' : 'desc';
+//$publicationOrder = isset($_GET['publicationOrder']) && $_GET['publicationOrder'] === 'asc' ? 'asc' : 'desc';
+//$nextPublicationOrder = $publicationOrder === 'desc' ? 'asc' : 'desc';
 
 $min_price = isset($_GET['min_price']) ? (float)$_GET['min_price'] : 0;
 $max_price = isset($_GET['max_price']) ? (float)$_GET['max_price'] : $min_price;
@@ -170,11 +164,6 @@ if ($result2 && mysqli_num_rows($result2) > 0) {
 //echo json_encode($response);
 
 $layout_content = include_template('react.php');
-//$layout_content = include_template('react.php', [
-//    'title' => $title,
-//    'content' => $page_content,
-//    'categories_query' => $categories_query,
-//    'con' => $con,
-//]);
+
 
 print_r($layout_content);
