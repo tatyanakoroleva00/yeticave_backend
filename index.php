@@ -17,8 +17,8 @@ $i = 0;
 //$publicationOrder = isset($_GET['publicationOrder']) && $_GET['publicationOrder'] === 'asc' ? 'asc' : 'desc';
 //$nextPublicationOrder = $publicationOrder === 'desc' ? 'asc' : 'desc';
 
-$min_price = isset($_GET['min_price']) ? (float)$_GET['min_price'] : 0;
-$max_price = isset($_GET['max_price']) ? (float)$_GET['max_price'] : $min_price;
+//$min_price = isset($_GET['min_price']) ? (float)$_GET['min_price'] : 0;
+//$max_price = isset($_GET['max_price']) ? (float)$_GET['max_price'] : $min_price;
 
 //-------------ВЫВОД ОСНОВНЫХ ЛОТОВ
 
