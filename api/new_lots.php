@@ -23,12 +23,14 @@ if($param === 'new' && $order === 'asc') {
         WHERE `lot_date` < NOW()
         ORDER BY lot_date ASC";
 } else if($param === 'new' && $order === 'desc') {
+    # Открытые лоты
     $query = "SELECT lot.id, lot.name, lot_message, img_url, lot_rate, lot_date, lot_step, lot.price, cur_price, category.name AS category_name
         FROM `lot`
         JOIN category ON lot.category_id = category.id
         WHERE `lot_date` > NOW()
         ORDER BY lot_date DESC";
 } else if($param === 'old' && $order === 'desc') {
+    # Закрытые лоты
     $query = "SELECT lot.id, lot.name, lot_message, img_url, lot_rate, lot_date, lot_step, lot.price, cur_price, category.name AS category_name
         FROM `lot`
         JOIN category ON lot.category_id = category.id
@@ -58,19 +60,8 @@ if($param === 'new' && $order === 'asc') {
         JOIN category ON lot.category_id = category.id
         WHERE `lot_date` < NOW()
         ORDER BY created_at DESC";
-} else if(isset($min_price) && isset($max_price)) {
-    $query = "SELECT lot.id, lot.name, lot_message, img_url, lot_rate, lot_date, lot_step, lot.price, cur_price, category.name AS category_name
-        FROM `lot`
-        JOIN category ON lot.category_id = category.id
-        WHERE `lot_date` > NOW()
-        AND cur_price BETWEEN '$min_price' AND '$max_price'";
-} else {
-    $query = "SELECT lot.id, lot.name, lot_message, img_url, lot_rate, lot_date, lot_step, lot.price, cur_price, category.name AS category_name
-        FROM `lot`
-        JOIN category ON lot.category_id = category.id
-        WHERE `lot_date` > NOW()
-        ORDER BY lot_date ASC";
 }
+
 
 $result = mysqli_query($con, $query);
 $rows = mysqli_fetch_all($result);
