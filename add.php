@@ -176,11 +176,11 @@ else {
 
     }
 
-    $layout_content = include_template('layout.php', [
-        'title' => $title,
-        'content' => $page_content,
-        'categories' => $categories
-    ]);
+//    $layout_content = include_template('layout.php', [
+//        'title' => $title,
+//        'content' => $page_content,
+//        'categories' => $categories
+//    ]);
 
-    print_r($layout_content);
+//    print_r($layout_content);
 }
