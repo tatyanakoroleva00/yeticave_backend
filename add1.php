@@ -102,6 +102,8 @@ if(count($errors)) {
     $category = $_POST['category'];
     $cur_price = $_POST['cur_price'];
     $price = $_POST['cur_price'];
+
+    echo json_encode(['file' => $_FILES['img_url'], 'data' => $_POST, 'errors' => $errors]);
 }
 
 
