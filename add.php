@@ -13,8 +13,7 @@ $dict = [
     'lot_step' => 'Ставка',
     'lot_date' => 'Дата завершения торгов'];
 
-header('Content-Type: application/json');
-//echo json_encode(['data' => $_POST, 'errors' => $errors]);
+//header('Content-Type: application/json');
 
 
 # Проверка на наличие пустых полей - и где конкретно
@@ -67,8 +66,8 @@ if (isset($_FILES['img_url']) && $_FILES['img_url']['error'] === UPLOAD_ERR_OK) 
 
     if(in_array($fileMimeType, $allowedMimeTypes)) {
         $file_name = uniqid() . '-' . $_FILES['img_url']['name'];
-        $file_path = __DIR__ . '/img/lots/';
-        $relative_file_url = '/img/lots/' . $file_name;
+        $file_path = __DIR__ . '/img/newLots/';
+        $relative_file_url = '/img/newLots/' . $file_name;
         $uploadFile = $file_path . $file_name;
 
         if(!count($errors)) {
@@ -132,10 +131,11 @@ if(count($errors)) {
         $sql = "SELECT id FROM lot ORDER BY id DESC LIMIT 1"; // Предполагается, что таблица называется 'products' и у нее есть поле 'id'
 
         if (mysqli_query($con, $query2)) {
-            echo 'Лот успешно добавлен!';
+//            echo 'Лот успешно добавлен!';
             // Получение ID последней вставленной записи
             $last_id = mysqli_insert_id($con);
             $name = $name . ' #' . $last_id;
+//            $_POST['lot_id'] = $last_id;
 
             $query3 = "UPDATE lot
                     SET name = ?
@@ -145,13 +145,14 @@ if(count($errors)) {
             $stmt3->bind_param('si', $name, $last_id);
             $stmt3->execute();
 
-            unset($_SESSION['uploaded_file']);
-
+//            unset($_SESSION['uploaded_file']);
+//            echo json_encode(['file' => $_FILES['img_url'], 'data' => $_POST, 'errors' => $errors]);
+            echo json_encode(['lotId' => $last_id]);
             // Переадресация на страницу с созданным лотом
 //            header("Location: show_lot.php?id=" . $last_id);
 //            header("Location: http://yeticave-second.loc/");
 
-            exit();
+//            exit();
         } else {
             echo "Ошибка добавления лота: " . mysqli_error($con);
         }
@@ -159,6 +160,6 @@ if(count($errors)) {
 }
 
 
-//    echo json_encode(['file' => $_FILES['img_url'], 'data' => $_POST, 'errors' => $errors]);
+
 
 
