@@ -5,21 +5,22 @@ require_once 'controllers/searchUserByEmail.php';
 require_once 'models/categories.php';
 require_once 'models/init.php';
 
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+//header("Access-Control-Allow-Origin: http://localhost:5173");
+//header("Access-Control-Allow-Credentials: true");
+//header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+//header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 $title = 'Регистрация';
 $login_page = 'login.php';
 
-$form = json_decode(file_get_contents('php://input'), true);
+//$form = json_decode(file_get_contents('php://input'), true);
+
 $required = ['email', 'password', 'name', 'message'];
 $errors = [];
 
 //Проверка на наличие ошибок при заполнении формы
 foreach ($required as $field) {
-    if (empty($form[$field])) {
+    if (empty($_POST[$field])) {
         if ($field === 'email') {
             $errors[$field] = 'Введите email';
         }
@@ -35,7 +36,7 @@ foreach ($required as $field) {
         //Проверка на то, что почта неправильно написана (не по формату почты)
     } else {
         if ($field === 'email') {
-            if (filter_var($form[$field], FILTER_VALIDATE_EMAIL)) {
+            if (filter_var($_POST[$field], FILTER_VALIDATE_EMAIL)) {
 //                    echo "Адрес электронной почты '$field' является допустимым.";
             } else {
 //                    echo "Адрес электронной почты '$field' является недопустимым.";
@@ -53,7 +54,7 @@ $result = mysqli_query($con, $query);
 $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 //Если нет ошибок и пользователь найден в БД по мейлу
-if ($user = searchUserByEmail($form['email'], $users)) {
+if ($user = searchUserByEmail($_POST['email'], $users)) {
     $errors['email'] = 'Такой пользователь уже существует';
 }
 //Картинка. Если есть картинка и нет ошибок - помещаем в папку.
@@ -95,27 +96,27 @@ if ($user = searchUserByEmail($form['email'], $users)) {
 
 //Если после проверок нет ошибок, то показываем определенную страницу
     if (!count($errors)) {
-        $email = $form['email'];
-        $password = $form['password'];
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $name = $form['name'];
-        $message = $form['message'];
-        $img_url = '';
-
-        if(isset($_POST['img_url'])) {
-        $img_url = $_POST['img_url'];
-        } else {
-            $img_url = '/img/avatars/avatar.jpg';
-        }
-
-        $sql = "INSERT INTO `users` SET `email` = ?, `password` = ?, `name` = ?, `contacts` = ?, `avatar` = ?";
-        $stmt = $con->prepare($sql);
-        $stmt->bind_param('sssss', $email, $hashed_password, $name, $message, $img_url);
-        $stmt->execute();
-
-        $result = $stmt -> get_result();
-
-        echo json_encode(['status' => 'success', 'message' => '*Теперь вы можете войти, используя свой email и пароль']);
+//        $email = $_POST['email'];
+//        $password = $_POST['password'];
+//        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+//        $name = $_POST['name'];
+//        $message = $_POST['message'];
+//        $img_url = '';
+//
+//        if(isset($_POST['img_url'])) {
+//        $img_url = $_POST['img_url'];
+//        } else {
+//            $img_url = '/img/avatars/avatar.jpg';
+//        }
+//
+//        $sql = "INSERT INTO `users` SET `email` = ?, `password` = ?, `name` = ?, `contacts` = ?, `avatar` = ?";
+//        $stmt = $con->prepare($sql);
+//        $stmt->bind_param('sssss', $email, $hashed_password, $name, $message, $img_url);
+//        $stmt->execute();
+//
+//        $result = $stmt -> get_result();
+//
+//        echo json_encode(['status' => 'success', 'message' => '*Теперь вы можете войти, используя свой email и пароль']);
 
 //        $page_content = include_template('login.php', [
 //            'login_page' => $login_page,

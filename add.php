@@ -89,7 +89,6 @@ if (isset($_FILES['img_url']) && $_FILES['img_url']['error'] === UPLOAD_ERR_OK) 
 }
 
 # Ошибки в форме.
-
 if(count($errors)) {
     echo json_encode(['file' => $_FILES['img_url'], 'data' => $_POST, 'errors' => $errors]);
 } else {
