@@ -4,11 +4,22 @@ require_once 'models/init.php';
 $lot_id = json_decode(file_get_contents('php://input'), true);
 $lot_id = $lot_id['id'];
 
-//echo json_decode($data);
+#1 --ДОБАВЛЕНИЕ ЛОТОВ В FAVOURITES ДЛЯ ПОКАЗА НА СТРАНИЦЕ HISTORY.PHP.
 
-#2 -- ВЫВОД ЛОТА НА СТРАНИЦЕ
+#Проверяем, существует ли массив избранных лотов в сессии
+if (!isset($_SESSION['favourite_lots'])) {
+    $_SESSION['favourite_lots'] = [];
+}
+
+#Добавляем текущий лот в массив избранных, если его там еще нет
+if (!in_array($lot_id, $_SESSION['favourite_lots'])) {
+    $_SESSION['favourite_lots'][] = $lot_id;
+}
+
+#2 --ВЫВОД ЛОТА НА СТРАНИЦЕ
+
 #Делаем запрос в БД, ищем лот по id. Соединяем две таблицы вместе по id. Выводим данные по лоту.
-$query = "SELECT lot.id, lot.name AS lot_name, lot_message, img_url, lot_rate, lot_date, lot_step, lot.price, cur_price, category.name AS category_name, user_id, users.email, users.name
+$query = "SELECT lot.id, lot.name AS lot_name, lot_message, img_url, lot_rate, lot_date, lot_step, lot.price, cur_price, category.name AS category_name, user_id, users.email, users.name, users.id AS users_id
        FROM `lot`
        JOIN category ON lot.category_id = category.id
        JOIN users ON lot.user_id = users.id
@@ -25,44 +36,8 @@ if ($chosen_lot && mysqli_num_rows($chosen_lot) > 0) {
     echo json_encode($search_array);
 }
 
-//#1 --ДОБАВЛЕНИЕ ЛОТОВ В FAVOURITES ДЛЯ ПОКАЗА НА СТРАНИЦЕ HISTORY.PHP.
-//
-//#Проверяем, существует ли массив избранных лотов в сессии
-//    if (!isset($_SESSION['favourite_lots'])) {
-//        $_SESSION['favourite_lots'] = [];
-//    }
-//
-//#Добавляем текущий лот в массив избранных, если его там еще нет
-//    if (!in_array($lot_id, $_SESSION['favourite_lots'])) {
-//        $_SESSION['favourite_lots'][] = $lot_id;
-//    }
-//
-#2 -- ВЫВОД ЛОТА НА СТРАНИЦЕ
 
-#Делаем запрос в БД, ищем лот по id. Соединяем две таблицы вместе по id.
-//    $query = "SELECT lot.id, lot.name, lot_message, img_url, lot_rate, lot_date, lot_step, lot.price, cur_price, category.name AS category_name
-//       FROM `lot`
-//       JOIN category ON lot.category_id = category.id
-//       WHERE lot.id = ?";
-//
-//    $stmt = $con->prepare($query);
-//    $stmt->bind_param('i', $lot_id);
-//    $stmt->execute();
-//
-//    $chosen_lot = $stmt->get_result();
-//
-//    if ($chosen_lot && mysqli_num_rows($chosen_lot) > 0) {
-//        foreach ($chosen_lot as $row => $elem) {
-//            $lot_name = $elem['name'];
-//            $lot_message = $elem['lot_message'];
-//            $img_url = $elem['img_url'];
-//            $lot_rate = $elem['lot_rate'];
-//            $lot_date = $elem['lot_date'];
-//            $lot_step = $elem['lot_step'];
-//            $price = $elem['price'];
-//            $cur_price = $elem['cur_price'];
-//            $category_name = $elem['category_name'];
-//        }
+#2 -- ВЫВОД ЛОТА НА СТРАНИЦЕ
 
 //# Делаем запрос по айди лота к БД, находим лот, его стоимость и мин.ставку. Меняем цену на лот
 //        if (isset($_POST['lot_rate'])) {
