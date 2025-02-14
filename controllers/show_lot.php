@@ -5,6 +5,18 @@ require_once '../models/init.php';
 $lot_id = json_decode(file_get_contents('php://input'), true);
 $lot_id = $lot_id['id'];
 
+#1 --ДОБАВЛЕНИЕ ЛОТОВ В FAVOURITES ДЛЯ ПОКАЗА НА СТРАНИЦЕ HISTORY.PHP.
+
+#Проверяем, существует ли массив избранных лотов в сессии
+if (!isset($_SESSION['favourite_lots'])) {
+    $_SESSION['favourite_lots'] = [];
+}
+
+#Добавляем текущий лот в массив избранных, если его там еще нет
+if (!in_array($lot_id, $_SESSION['favourite_lots'])) {
+    $_SESSION['favourite_lots'][] = $lot_id;
+}
+
 # ЗАПРОС К БД. ВЫВОД ЛОТА.
 $query = "SELECT lot.id, lot.name AS lot_name, lot_message, img_url, lot_rate, lot_date, lot_step, lot.price, cur_price,
        category.name AS category_name, user_id, users.email, users.name, users.id AS users_id
