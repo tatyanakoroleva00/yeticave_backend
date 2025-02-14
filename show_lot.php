@@ -54,10 +54,13 @@ if (isset($_GET['id'])) {
 
             $errors = [];
 
-            $minimal_possible_rate = $cur_price + $lot_step;
+            $minimal_possible_rate = $cur_price + $lot_step; //500+123
+            // Проверка ставки
             if ($lot_rate > $minimal_possible_rate || $lot_rate == $minimal_possible_rate) {
-                $query = "SELECT lot_rate, cur_price from lot WHERE id = '$lot_id'";
+                $query = "SELECT cur_price from lot WHERE id = '$lot_id'"; //700
                 $result = mysqli_query($con, $query);
+
+
                 $cur_price = $lot_rate;
 
                 $user_id = $_SESSION['user']['id'];
@@ -66,7 +69,7 @@ if (isset($_GET['id'])) {
                     $row = mysqli_fetch_assoc($result);
                     $data = json_decode($row['lot_rate'], true);
 
-# Добавление нового значения
+# Добавление нового значения к лоту в БД (ставка)
                     if (!is_array($data)) {
                         $data = [];
                     }
