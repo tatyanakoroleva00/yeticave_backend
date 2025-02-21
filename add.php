@@ -69,6 +69,7 @@ if (isset($_FILES['img_url']) && $_FILES['img_url']['error'] === UPLOAD_ERR_OK) 
         $file_path = __DIR__ . '/img/newLots/';
         $relative_file_url = '/img/newLots/' . $file_name;
         $uploadFile = $file_path . $file_name;
+        $_POST['img_url'] = $relative_file_url;
 
         if(!count($errors)) {
         # Перемещение файла
@@ -82,19 +83,13 @@ if (isset($_FILES['img_url']) && $_FILES['img_url']['error'] === UPLOAD_ERR_OK) 
     } else {
         $errors['img_url'] = 'Файл не является допустимым изображением.';
     }
-} else {
-//    if(!isset($_SESSION['uploaded_file'])) {
-//        $errors['img_url'] = "Файл не был загружен.";
-//    }
 }
+
 
 # Ошибки в форме.
 if(count($errors)) {
     echo json_encode(['file' => $_FILES['img_url'], 'data' => $_POST, 'errors' => $errors]);
 } else {
-    // При изначальном добавлении лота $cur_price = $price у меня
-//    $formatted_cur_price = formattedPrice($_POST['cur_price']); //Отформатированная цена для публикации на странице
-//    $formatted_price = formattedPrice($_POST['cur_price']); //Отформатированная цена для публикации на странице
 
     $name = $_POST['lot_name'];
     $lot_message = $_POST['lot_message'];
