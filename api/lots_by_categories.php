@@ -6,7 +6,7 @@ $categoryData = json_decode(file_get_contents('php://input'), true);
 $cat = $categoryData['category'];
 
 $query = "
-    SELECT *
+    SELECT lot.name AS name, category.name AS category_name, lot.id AS id, category.id AS category_id, cur_price, img_url, lot_message, lot_date, price
     FROM lot
     JOIN category ON lot.category_id = category.id
     WHERE category.name_eng = ?;";
