@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'models/init.php';
+require_once 'controllers/thumb_func.php';
 
 $errors = [];
 $required = ['lot_name', 'category', 'lot_message', 'img_url', 'cur_price', 'lot_step', 'lot_date'];
@@ -67,15 +68,27 @@ if (isset($_FILES['img_url']) && $_FILES['img_url']['error'] === UPLOAD_ERR_OK) 
     if(in_array($fileMimeType, $allowedMimeTypes)) {
         $file_name = uniqid() . '-' . $_FILES['img_url']['name'];
         $file_path = __DIR__ . '/img/newLots/';
+        $file_path_thumb = __DIR__ . '/img/thumbs/';
         $relative_file_url = '/img/newLots/' . $file_name;
+        $relative_file_url_thumb = '/img/thumbs/' . 'thumb-' . $file_name;
         $uploadFile = $file_path . $file_name;
-        $_POST['img_url'] = $relative_file_url;
 
         if(!count($errors)) {
         # Перемещение файла
             if(move_uploaded_file($_FILES['img_url']['tmp_name'], $uploadFile)) {
                 $_SESSION['uploaded_file'] = $relative_file_url;
                 $_POST['img_url'] = $relative_file_url;
+
+                // Создание миниатюры изображения
+                $thumbnailWidth = 350; // Задайте нужную ширину миниатюры
+                $thumbnailHeight = 150; // Задайте нужную высоту миниатюры
+                $thumbnailPath = $file_path_thumb . 'thumb-' .$file_name ; // Путь для сохранения миниатюры
+
+                $result = createThumbnail($uploadFile, $thumbnailPath, $thumbnailWidth, $thumbnailHeight, $fileMimeType);
+                if($result) {
+                    $_POST['thumb'] =  $relative_file_url_thumb;
+                }
+
 
             } else {
                 $errors['img_url'] = 'Ошибка загрузки файла.';
@@ -84,7 +97,6 @@ if (isset($_FILES['img_url']) && $_FILES['img_url']['error'] === UPLOAD_ERR_OK) 
         $errors['img_url'] = 'Файл не является допустимым изображением.';
     }
 }
-
 
 # Ошибки в форме.
 if(count($errors)) {
@@ -99,6 +111,8 @@ if(count($errors)) {
     $cur_price = $_POST['cur_price'];
     $price = $_POST['cur_price'];
     $lot_date = $_POST['lot_date'];
+    $thumb = $_POST['thumb'];
+
 
     // Поиск айди пользователя
     $user_id = $_SESSION['user']['id'];
@@ -119,17 +133,15 @@ if(count($errors)) {
 
         $query2 = "INSERT into `lot` SET `name` = '$name', `lot_message` = '$lot_message', `img_url` = '$img_url',
                 `lot_step` = '$lot_step', `category_id` = '$category_id', `price` = '$price', `lot_date` = '$lot_date', `lot_rate` = 0, `cur_price` = '$price',
-                `user_id` = '$user_id', `notified` =  NULL";
+                `user_id` = '$user_id', `notified` =  NULL, `thumb_pic` = '$thumb';";
 
         // SQL-запрос для получения последнего добавленного товара
         $sql = "SELECT id FROM lot ORDER BY id DESC LIMIT 1"; // Предполагается, что таблица называется 'products' и у нее есть поле 'id'
 
         if (mysqli_query($con, $query2)) {
-//            echo 'Лот успешно добавлен!';
             // Получение ID последней вставленной записи
             $last_id = mysqli_insert_id($con);
             $name = $name . ' #' . $last_id;
-//            $_POST['lot_id'] = $last_id;
 
             $query3 = "UPDATE lot
                     SET name = ?
@@ -139,14 +151,8 @@ if(count($errors)) {
             $stmt3->bind_param('si', $name, $last_id);
             $stmt3->execute();
 
-//            unset($_SESSION['uploaded_file']);
-//            echo json_encode(['file' => $_FILES['img_url'], 'data' => $_POST, 'errors' => $errors]);
             echo json_encode(['lotId' => $last_id]);
-            // Переадресация на страницу с созданным лотом
-//            header("Location: show_lot.php?id=" . $last_id);
-//            header("Location: http://yeticave-second.loc/");
 
-//            exit();
         } else {
             echo "Ошибка добавления лота: " . mysqli_error($con);
         }

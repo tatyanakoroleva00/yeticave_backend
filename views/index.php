@@ -14,7 +14,7 @@
     </ul>
     <br/>
     <div>
-        <?php echo $_SESSION['user'] ? "<button onclick=\"window.location.href = '/history.php'\">Просмотренные лоты</button>" : '' ?>
+        <?php echo $_SESSION['user'] ? "<button onclick=\"window.location.href = 'api/history.pp'\">Просмотренные лоты</button>" : '' ?>
         <button onclick="window.location.href = '?show=new'">Открытые лоты</button>
         <button onclick="window.location.href = '?show=old'">Закрытые лоты</button>
     </div>
