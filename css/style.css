@@ -90,11 +90,9 @@ h2 {
 .text-link:active {
   color: #2590c6;
 }
-
 .visually-hidden:not(:focus):not(:active),
 input.visually-hidden {
   position: absolute;
-
   width: 1px;
   height: 1px;
   margin: -1px;
