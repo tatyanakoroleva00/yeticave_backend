@@ -50,7 +50,7 @@
         <div class="lot-col">
             <h3>Информация торгов</h3>
             <?php if (isset($_SESSION['user'])) : ?>
-                <h4><b><a href="/my_bets.php">Мои ставки тут</a></b></h4>
+                <h4><b><a href="">Мои ставки тут</a></b></h4>
             <? endif; ?>
 
             <h4>Торги</h4>
